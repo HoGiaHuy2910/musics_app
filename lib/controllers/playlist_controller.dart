@@ -11,7 +11,8 @@ class PlaylistController {
   ValueNotifier<List<Song>>([]);
 
   /// ❤️ FAVORITES
-  final ValueNotifier<Set<String>> favorites = ValueNotifier({});
+  final ValueNotifier<Set<String>> favorites =
+  ValueNotifier<Set<String>>({});
 
   /// ➕ ADD
   void add(Song song) {
@@ -79,14 +80,19 @@ class PlaylistController {
   void toggleFavorite(Song song) {
     final favs = favorites.value;
 
-    if (favs.contains(song.audioAsset)) {
-      favs.remove(song.audioAsset);
+    if (favs.contains(song.Songid)) {
+      favs.remove(song.Songid);
     } else {
-      favs.add(song.audioAsset);
+      favs.add(song.Songid);
     }
 
     favorites.value = {...favs};
   }
+
+  bool isFavorite(Song song) {
+    return favorites.value.contains(song.Songid);
+  }
+
 
   bool isFavorite(Song song) {
     return favorites.value.contains(song.audioAsset);
