@@ -92,10 +92,5 @@ class PlaylistController {
   bool isFavorite(Song song) {
     return favorites.value.contains(song.Songid);
   }
-
-
-  bool isFavorite(Song song) {
-    return favorites.value.contains(song.audioAsset);
-  }
 }
 

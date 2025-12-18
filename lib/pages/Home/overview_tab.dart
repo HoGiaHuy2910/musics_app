@@ -144,7 +144,7 @@ class OverviewTab extends StatelessWidget {
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                       color: isFav
-                                          ? Colors.redAccent
+                                          ? Colors.amberAccent
                                           : Colors.white,
                                       size: 20,
                                     ),
@@ -213,7 +213,7 @@ class OverviewTab extends StatelessWidget {
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color:
-                            isFav ? Colors.red : Colors.grey,
+                            isFav ? Colors.amberAccent : Colors.grey,
                             size: 20,
                           ),
                           onPressed: () =>

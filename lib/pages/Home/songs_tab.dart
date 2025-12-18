@@ -42,7 +42,7 @@ class SongsTab extends StatelessWidget {
                   return IconButton(
                     icon: Icon(
                       isFav ? Icons.favorite : Icons.favorite_border,
-                      color: isFav ? Colors.red : Colors.grey,
+                      color: isFav ? Colors.amberAccent : Colors.grey,
                       size: 20,
                     ),
                     onPressed: () =>
