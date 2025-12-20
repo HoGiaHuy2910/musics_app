@@ -43,4 +43,32 @@ final songs = [
     image: 'assets/images/cover6.png',
     audioAsset: 'assets/audio/Song6.mp3',
   ),
+  Song(
+    Songid:'7',
+    title: 'Trước khi tuổi trẻ này đóng lối',
+    artist: 'BẠN CÓ TÀI MÀ',
+    image: 'assets/images/cover7.png',
+    audioAsset: 'assets/audio/Song7.mp3',
+  ),
+  Song(
+    Songid:'8',
+    title: 'Nấu cho em ăn',
+    artist: 'Đen Vâu Official',
+    image: 'assets/images/cover8.png',
+    audioAsset: 'assets/audio/Song8.mp3',
+  ),
+  Song(
+    Songid:'9',
+    title: 'Âm thầm bên em',
+    artist: 'Sơn Tùng M-TP',
+    image: 'assets/images/cover9.png',
+    audioAsset: 'assets/audio/Song9.mp3',
+  ),
+  Song(
+    Songid:'10',
+    title: 'Buông đôi tay nhau ra',
+    artist: 'Sơn Tùng M-TP',
+    image: 'assets/images/cover10.png',
+    audioAsset: 'assets/audio/Song10.mp3',
+  ),
 ];
