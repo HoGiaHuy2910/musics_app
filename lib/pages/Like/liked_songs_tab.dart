@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../controllers/playlist_controller.dart';
 import '../../controllers/audio_controller.dart';
+import '../../data/mock_songs.dart';
 import '../../models/song.dart';
 import '../now_playing_page.dart';
 
@@ -15,7 +16,12 @@ class LikedSongsTab extends StatelessWidget {
     return ValueListenableBuilder<Set<String>>(
       valueListenable: playlistController.favorites,
       builder: (context, favoriteIds, _) {
-        if (favoriteIds.isEmpty) {
+        // 🔥 LẤY TỪ TOÀN BỘ SONGS – KHÔNG PHẢI PLAYLIST
+        final List<Song> likedSongs = songs
+            .where((song) => favoriteIds.contains(song.Songid))
+            .toList();
+
+        if (likedSongs.isEmpty) {
           return const Center(
             child: Text(
               'Chưa có bài hát yêu thích',
@@ -23,11 +29,6 @@ class LikedSongsTab extends StatelessWidget {
             ),
           );
         }
-
-        // 🔥 LẤY DANH SÁCH SONG TỪ PLAYLIST + MOCK
-        final List<Song> likedSongs = playlistController.playlist.value
-            .where((song) => favoriteIds.contains(song.Songid))
-            .toList();
 
         return ListView.builder(
           padding: const EdgeInsets.only(bottom: 90),
