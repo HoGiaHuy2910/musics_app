@@ -22,4 +22,25 @@ final songs = [
     image: 'assets/images/cover3.png',
     audioAsset: 'assets/audio/Song3.mp3',
   ),
+  Song(
+    Songid:'4',
+    title: 'Sống cho hết đời thanh xuân',
+    artist: 'BẠN CÓ TÀI MÀ',
+    image: 'assets/images/cover4.png',
+    audioAsset: 'assets/audio/Song4.mp3',
+  ),
+  Song(
+    Songid:'5',
+    title: 'Người đáng thương là anh',
+    artist: 'OnlyC Production',
+    image: 'assets/images/cover5.png',
+    audioAsset: 'assets/audio/Song5.mp3',
+  ),
+  Song(
+    Songid:'6',
+    title: 'Bạn đời',
+    artist: 'KARIK',
+    image: 'assets/images/cover6.png',
+    audioAsset: 'assets/audio/Song6.mp3',
+  ),
 ];

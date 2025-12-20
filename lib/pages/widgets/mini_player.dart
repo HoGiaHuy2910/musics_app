@@ -35,7 +35,7 @@ class MiniPlayer extends StatelessWidget {
               border: Border(
                 top: BorderSide(
                   color: Colors.black, // 👈 viền phân cách
-                  width: 1.5,
+                  width: 2,
                 ),
               ),
             ),
@@ -57,9 +57,9 @@ class MiniPlayer extends StatelessWidget {
                           value: value.clamp(0.0, 1.0),
                           backgroundColor: Colors.grey.shade400,
                           valueColor: const AlwaysStoppedAnimation(
-                            Colors.black,
+                            Colors.amberAccent,
                           ),
-                          minHeight: 4,
+                          minHeight: 5,
                         );
                       },
                     );

@@ -39,11 +39,11 @@ class HomePage extends StatelessWidget {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
             labelStyle: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
             unselectedLabelStyle: TextStyle(
-              fontSize: 15,
+              fontSize: 18,
             ),
             tabs: [
               Tab(text: 'Overview'),
