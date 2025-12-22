@@ -98,9 +98,9 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
 
             // ===== CONTROLS =====
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // 📄 PLAYLIST  ✅ ĐÃ SỬA ĐÚNG
+                // 📄 PLAYLIST
                 IconButton(
                   icon: const Icon(Icons.queue_music),
                   onPressed: () {
@@ -113,19 +113,12 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                   },
                 ),
 
-                const SizedBox(width: 16),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // ⏪ BACK 10s
-                    IconButton(
-                      iconSize: 36,
-                      icon: const Icon(Icons.replay_10),
-                      onPressed: controller.seekBackward,
-                    ),
-
-                    const SizedBox(width: 16),
+                // ⏪ BACK 10s
+                IconButton(
+                  iconSize: 36,
+                  icon: const Icon(Icons.replay_10),
+                  onPressed: controller.seekBackward,
+                ),
 
                 // ▶️ / ⏸️ PLAY / PAUSE
                 StreamBuilder<bool>(
@@ -133,7 +126,7 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                   builder: (_, snap) {
                     final playing = snap.data ?? false;
                     return IconButton(
-                      iconSize: 72,
+                      iconSize: 72, // ✅ giữ nguyên
                       icon: Icon(
                         playing
                             ? Icons.pause_circle_filled
@@ -144,20 +137,14 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                   },
                 ),
 
-                const SizedBox(width: 16),
-
-                    // ⏩ FORWARD 10s
-                    IconButton(
-                      iconSize: 36,
-                      icon: const Icon(Icons.forward_10),
-                      onPressed: controller.seekForward,
-                    ),
-                  ],
+                // ⏩ FORWARD 10s
+                IconButton(
+                  iconSize: 36,
+                  icon: const Icon(Icons.forward_10),
+                  onPressed: controller.seekForward,
                 ),
 
-                const SizedBox(width: 16),
-
-                // 🔁 REPEAT ONE
+                // 🔁 REPEAT
                 ValueListenableBuilder<bool>(
                   valueListenable: controller.isRepeatOne,
                   builder: (_, repeat, __) {
