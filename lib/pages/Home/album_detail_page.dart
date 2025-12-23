@@ -18,6 +18,7 @@ class AlbumDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audio = AudioController.instance;
+    final playlist = PlaylistController.instance; // ✅ THÊM DÒNG NÀY
 
     return Scaffold(
       appBar: AppBar(
@@ -60,6 +61,7 @@ class AlbumDetailPage extends StatelessWidget {
             ),
             subtitle: Text(song.artist),
 
+            // ❤️ + ⋮
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -70,12 +72,17 @@ class AlbumDetailPage extends StatelessWidget {
                     final isFav = playlist.isFavorite(song);
                     return IconButton(
                       icon: Icon(
-                        isFav ? Icons.favorite : Icons.favorite_border,
-                        color: isFav ? Colors.amberAccent : Colors.grey,
+                        isFav
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: isFav
+                            ? Colors.amberAccent
+                            : Colors.grey,
                         size: 20,
                       ),
-                      onPressed: () =>
-                          playlist.toggleFavorite(song),
+                      onPressed: () {
+                        playlist.toggleFavorite(song);
+                      },
                     );
                   },
                 ),
@@ -89,6 +96,7 @@ class AlbumDetailPage extends StatelessWidget {
                 ),
               ],
             ),
+
             onTap: () {
               audio.playSong(song);
               Navigator.push(
