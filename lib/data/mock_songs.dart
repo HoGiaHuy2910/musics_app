@@ -6,7 +6,7 @@ final songs = [
     title: 'Đừng làm trái tim anh đau',
     artist: 'Sơn Tùng M-TP',
     image: 'https://res.cloudinary.com/dvlcxvr1i/image/upload/v1766473021/cover1.jpg',
-    audioNetwork: 'assets/audio/Song.mp3',
+    audioNetwork: 'https://res.cloudinary.com/dvlcxvr1i/video/upload/v1766478191/Song1.mp3',
   ),
   Song(
     Songid:'2',
