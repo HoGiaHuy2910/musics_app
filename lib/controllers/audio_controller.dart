@@ -15,7 +15,7 @@ class AudioController {
       if (d != null) duration.value = d;
     });
 
-    // 🔁 FIX repeat + sync progress
+    // 🔁 repeat one (phòng hờ – vẫn giữ)
     player.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed &&
           isRepeatOne.value) {
@@ -35,27 +35,28 @@ class AudioController {
   // 🔁 Repeat 1
   final ValueNotifier<bool> isRepeatOne = ValueNotifier(false);
 
-  // 🔊 Cho mini progress
+  // 🔊 Mini progress
   final ValueNotifier<Duration> position =
   ValueNotifier(Duration.zero);
   final ValueNotifier<Duration> duration =
   ValueNotifier(Duration.zero);
 
+  // ▶️ PLAY SONG (NETWORK)
   Future<void> playSong(Song song) async {
-    // 🔥 LUÔN ĐẢM BẢO BÀI ĐANG PHÁT CÓ TRONG PLAYLIST
+    // 🔥 đảm bảo có trong playlist
     PlaylistController.instance.playFrom(song);
 
     if (currentSong.value?.audioNetwork != song.audioNetwork) {
-      await player.setAsset(song.audioNetwork);
+      await player.setUrl(song.audioNetwork); // ✅ SỬA Ở ĐÂY
       currentSong.value = song;
     }
     player.play();
   }
 
+  // ⏩⏪ SEEK
   void seekBy(int seconds) {
     final pos = player.position;
     final dur = player.duration ?? Duration.zero;
-
     final target = pos + Duration(seconds: seconds);
 
     if (target < Duration.zero) {
@@ -67,24 +68,21 @@ class AudioController {
     }
   }
 
-  void seekForward([int seconds = 10]) {
-    seekBy(seconds);
-  }
+  void seekForward([int seconds = 10]) => seekBy(seconds);
+  void seekBackward([int seconds = 10]) => seekBy(-seconds);
 
-  void seekBackward([int seconds = 10]) {
-    seekBy(-seconds);
-  }
-
+  // ▶️ / ⏸️
   void togglePlay() {
     player.playing ? player.pause() : player.play();
   }
 
-  // ⛔ STOP (🔥 BẠN THIẾU CÁI NÀY)
+  // ⛔ STOP
   void stop() {
     player.stop();
     currentSong.value = null;
   }
 
+  // 🔁 TOGGLE REPEAT ONE
   Future<void> toggleRepeat() async {
     isRepeatOne.value = !isRepeatOne.value;
     await player.setLoopMode(
