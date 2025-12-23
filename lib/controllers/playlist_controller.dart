@@ -16,7 +16,7 @@ class PlaylistController {
 
   /// ➕ ADD
   void add(Song song) {
-    if (!playlist.value.any((s) => s.audioAsset == song.audioAsset)) {
+    if (!playlist.value.any((s) => s.audioNetwork == song.audioNetwork)) {
       playlist.value = [...playlist.value, song];
     }
   }
@@ -26,14 +26,14 @@ class PlaylistController {
     final list = playlist.value;
 
     // nếu bài chưa có → reset playlist từ bài này
-    if (!list.any((s) => s.audioAsset == song.audioAsset)) {
+    if (!list.any((s) => s.audioNetwork == song.audioNetwork)) {
       playlist.value = [song];
       return;
     }
 
     // nếu có → cắt playlist từ bài này trở đi
     final index =
-    list.indexWhere((s) => s.audioAsset == song.audioAsset);
+    list.indexWhere((s) => s.audioNetwork == song.audioNetwork);
 
     playlist.value = list.sublist(index);
   }
@@ -42,12 +42,12 @@ class PlaylistController {
   void remove(Song song) {
     final list = [...playlist.value];
     final index = list.indexWhere(
-          (s) => s.audioAsset == song.audioAsset,
+          (s) => s.audioNetwork == song.audioNetwork,
     );
 
     final isCurrent =
-        AudioController.instance.currentSong.value?.audioAsset ==
-            song.audioAsset;
+        AudioController.instance.currentSong.value?.audioNetwork ==
+            song.audioNetwork;
 
     list.removeAt(index);
     playlist.value = list;
@@ -67,7 +67,7 @@ class PlaylistController {
   void playFromHere(Song song) {
     final list = playlist.value;
     final index = list.indexWhere(
-          (s) => s.audioAsset == song.audioAsset,
+          (s) => s.audioNetwork == song.audioNetwork,
     );
 
     if (index == -1) return;

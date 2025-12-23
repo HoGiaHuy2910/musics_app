@@ -49,11 +49,11 @@ class PlaylistPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final song = songs[index];
                     final isPlaying =
-                        audio.currentSong.value?.audioAsset ==
-                            song.audioAsset;
+                        audio.currentSong.value?.audioNetwork ==
+                            song.audioNetwork;
 
                     return Dismissible(
-                      key: ValueKey(song.audioAsset),
+                      key: ValueKey(song.audioNetwork),
                       direction: DismissDirection.horizontal,
                       onDismissed: (_) {
                         playlist.remove(song);

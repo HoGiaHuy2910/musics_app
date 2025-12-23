@@ -45,8 +45,8 @@ class AudioController {
     // 🔥 LUÔN ĐẢM BẢO BÀI ĐANG PHÁT CÓ TRONG PLAYLIST
     PlaylistController.instance.playFrom(song);
 
-    if (currentSong.value?.audioAsset != song.audioAsset) {
-      await player.setAsset(song.audioAsset);
+    if (currentSong.value?.audioNetwork != song.audioNetwork) {
+      await player.setAsset(song.audioNetwork);
       currentSong.value = song;
     }
     player.play();
