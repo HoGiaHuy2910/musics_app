@@ -40,7 +40,7 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
             // ===== IMAGE =====
         ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Image.asset( widget.song.image,
+            child: Image.network( widget.song.image,
               height: 300,
               width: double.infinity,
               fit: BoxFit.cover,
