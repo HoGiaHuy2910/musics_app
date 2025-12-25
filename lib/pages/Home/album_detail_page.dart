@@ -290,8 +290,10 @@ class _AlbumDetailPageState extends State<AlbumDetailPage> {
                           ),
                         ),
                       IconButton(
-                        icon: const Icon(Icons.more_vert),
-                        onPressed: () => showSongMoreSheet(context, song),
+                        icon: const Icon(Icons.playlist_add),
+                        onPressed: () {
+                          playlist.add(song);
+                        },
                       ),
                     ],
                   ),

@@ -226,10 +226,11 @@ class _ArtistDetailPageState extends State<ArtistDetailPage> {
                         },
                       ),
 
-                      // ⋮ more
                       IconButton(
-                        icon: const Icon(Icons.more_vert),
-                        onPressed: () => showSongMoreSheet(context, song),
+                        icon: const Icon(Icons.playlist_add),
+                        onPressed: () {
+                          PlaylistController.instance.add(song);
+                        },
                       ),
                     ],
                   ),

@@ -124,8 +124,16 @@ class OverviewTab extends StatelessWidget {
 
                               const SizedBox(width: 24),
 
-                              const Icon(Icons.download,
-                                  color: Colors.white, size: 20),
+                              InkWell(
+                                onTap: () {
+                                  PlaylistController.instance.add(song);
+                                },
+                                child: const Icon(
+                                  Icons.playlist_add,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
 
                               const SizedBox(width: 12),
 
@@ -222,9 +230,9 @@ class OverviewTab extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.playlist_add),
                       onPressed: () {
-                        showSongMoreSheet(context, song);
+                        PlaylistController.instance.add(song);
                       },
                     ),
                   ],

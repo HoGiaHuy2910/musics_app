@@ -51,11 +51,10 @@ class SongsTab extends StatelessWidget {
                 },
               ),
 
-              // ⋮ MORE
               IconButton(
-                icon: const Icon(Icons.more_vert),
+                icon: const Icon(Icons.playlist_add),
                 onPressed: () {
-                  showSongMoreSheet(context, song);
+                  PlaylistController.instance.add(song);
                 },
               ),
             ],

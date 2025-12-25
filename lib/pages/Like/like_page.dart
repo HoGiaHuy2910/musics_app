@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'liked_songs_tab.dart';
 import 'liked_albums_tab.dart';
-import 'liked_artists_tab.dart';
 
 class LikePage extends StatelessWidget {
   const LikePage({super.key});
@@ -24,16 +23,15 @@ class LikePage extends StatelessWidget {
             indicatorColor: Colors.amber,
             indicatorWeight: 3,
             labelStyle: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
             unselectedLabelStyle: TextStyle(
-              fontSize: 15,
+              fontSize: 18,
             ),
             tabs: [
               Tab(text: 'Songs'),
               Tab(text: 'Albums'),
-              Tab(text: 'Artists'),
             ],
           ),
         ),
@@ -41,7 +39,6 @@ class LikePage extends StatelessWidget {
           children: [
             LikedSongsTab(),
             LikedAlbumsTab(),
-            LikedArtistsTab(),
           ],
         ),
       ),

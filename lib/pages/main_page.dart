@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   final pages = const [
     HomePage(),
     LikePage(),
-    PlaceholderPage(title: 'Downloads'),
+    PlaceholderPage(title: 'Following'),
     PlaceholderPage(title: 'Settings'),
   ];
 
@@ -54,8 +54,8 @@ class _MainPageState extends State<MainPage> {
             label: 'Likes',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.download),
-            label: 'Downloads',
+            icon: Icon(Icons.person_add_alt_1),
+            label: 'Following',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

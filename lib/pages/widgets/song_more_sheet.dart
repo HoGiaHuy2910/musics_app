@@ -21,11 +21,6 @@ void showSongMoreSheet(BuildContext context, Song song) {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.download),
-              title: const Text('Download (tạm thời)'),
-              onTap: () => Navigator.pop(context),
-            ),
           ],
         ),
       );
