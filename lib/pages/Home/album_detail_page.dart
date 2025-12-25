@@ -147,7 +147,7 @@ class _AlbumDetailPageState extends State<AlbumDetailPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.network(
-                    album.image,
+                    album.Songimage,
                     width: double.infinity,
                     height: 220,
                     fit: BoxFit.cover,
@@ -256,7 +256,7 @@ class _AlbumDetailPageState extends State<AlbumDetailPage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          song.image,
+                          song.Songimage,
                           width: 50,
                           height: 50,
                           fit: BoxFit.cover,

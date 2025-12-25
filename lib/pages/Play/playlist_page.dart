@@ -81,7 +81,7 @@ class PlaylistPage extends StatelessWidget {
                               child: Opacity(
                                 opacity: isPlaying ? 0.6 : 1.0,
                                 child: Image.network(
-                                  song.image,
+                                  song.Songimage,
                                   width: 48,
                                   height: 48,
                                   fit: BoxFit.cover,

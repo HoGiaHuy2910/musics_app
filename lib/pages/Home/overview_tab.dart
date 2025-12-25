@@ -42,7 +42,7 @@ class OverviewTab extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(24),
                         child: Image.network(
-                          song.image,
+                          song.Songimage,
                           width: double.infinity,
                           height: double.infinity,
                           fit: BoxFit.cover,
@@ -185,7 +185,7 @@ class OverviewTab extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        song.image,
+                        song.Songimage,
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,

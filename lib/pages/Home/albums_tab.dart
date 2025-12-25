@@ -58,7 +58,7 @@ class AlbumsTab extends StatelessWidget {
                       // 🖼 COVER
                       Positioned.fill(
                         child: Image.network(
-                          album.image,
+                          album.Songimage,
                           fit: BoxFit.cover,
                         ),
                       ),
