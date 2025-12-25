@@ -38,7 +38,7 @@ class LikedAlbumsTab extends StatelessWidget {
             final albumId = albums.keys.elementAt(index);
             final albumSongs = albums[albumId]!;
             final albumTitle = albumSongs.first.albumTitle;
-            final albumImage = albumSongs.first.image;
+            final albumImage = albumSongs.first.Songimage;
 
             return ListTile(
               leading: ClipRRect(
