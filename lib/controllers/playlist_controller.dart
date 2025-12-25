@@ -14,12 +14,25 @@ class PlaylistController {
   final ValueNotifier<Set<String>> favorites =
   ValueNotifier<Set<String>>({});
 
-  /// ➕ ADD TO PLAYLIST (không trùng)
-  void add(Song song) {
+  /// 💿 FAVORITE ALBUMS
+  final ValueNotifier<Set<String>> favoriteAlbums =
+  ValueNotifier<Set<String>>({});
+
+  // ======================
+  // 🎵 PLAYLIST
+  // ======================
+
+  /// ✅ đảm bảo bài có trong playlist (dùng khi add từ menu ⋮)
+  void ensureInPlaylist(Song song) {
     final list = playlist.value;
     if (!list.any((s) => s.audioNetwork == song.audioNetwork)) {
       playlist.value = [...list, song];
     }
+  }
+
+  /// ➕ ADD TO PLAYLIST (không trùng)
+  void add(Song song) {
+    ensureInPlaylist(song);
   }
 
   /// ▶️ PLAY FROM SONG (user chủ động chọn bài)
@@ -32,11 +45,44 @@ class PlaylistController {
     list.indexWhere((s) => s.audioNetwork == song.audioNetwork);
 
     if (index == -1) {
-      // chưa có → reset playlist
       playlist.value = [song];
     } else {
-      // có → cắt từ bài này
       playlist.value = list.sublist(index);
+    }
+  }
+
+  /// ▶️ PLAY NEXT (tự chuyển bài khi hết bài)
+  void playNext() {
+    final list = playlist.value;
+    if (list.isEmpty) {
+      AudioController.instance.stop();
+      return;
+    }
+
+    final current = AudioController.instance.currentSong.value;
+
+    // nếu chưa có current -> play bài đầu tiên
+    if (current == null) {
+      AudioController.instance.playSong(list.first);
+      return;
+    }
+
+    final index = list.indexWhere(
+          (s) => s.audioNetwork == current.audioNetwork,
+    );
+
+    // nếu không tìm thấy current -> play bài đầu tiên
+    if (index == -1) {
+      AudioController.instance.playSong(list.first);
+      return;
+    }
+
+    // nếu còn bài kế tiếp
+    if (index + 1 < list.length) {
+      AudioController.instance.playSong(list[index + 1]);
+    } else {
+      // hết playlist -> stop
+      AudioController.instance.stop();
     }
   }
 
@@ -55,17 +101,9 @@ class PlaylistController {
     list.removeAt(index);
     playlist.value = list;
 
-    // nếu xoá bài đang phát
+    // nếu xoá bài đang phát -> chuyển bài tiếp theo / stop
     if (isCurrent) {
-      if (list.isNotEmpty) {
-        // ưu tiên bài kế tiếp
-        final nextIndex =
-        index < list.length ? index : list.length - 1;
-        AudioController.instance.playSong(list[nextIndex]);
-      } else {
-        // hết playlist
-        AudioController.instance.stop();
-      }
+      playNext();
     }
   }
 
@@ -85,7 +123,6 @@ class PlaylistController {
   // ❤️ FAVORITES
   // ======================
 
-  /// ❤️ TOGGLE FAVORITE
   void toggleFavorite(Song song) {
     final favs = {...favorites.value};
 
@@ -98,16 +135,14 @@ class PlaylistController {
     favorites.value = favs;
   }
 
-  /// ❤️ CHECK FAVORITE
   bool isFavorite(Song song) {
     return favorites.value.contains(song.Songid);
   }
 
-  /// 💿 FAVORITE ALBUMS
-  final ValueNotifier<Set<String>> favoriteAlbums =
-  ValueNotifier<Set<String>>({});
+  // ======================
+  // 💿 FAVORITE ALBUMS
+  // ======================
 
-  // ❤️ TOGGLE FAVORITE ALBUM
   void toggleFavoriteAlbum(String albumId) {
     final favs = favoriteAlbums.value;
 
@@ -123,5 +158,4 @@ class PlaylistController {
   bool isFavoriteAlbum(String albumId) {
     return favoriteAlbums.value.contains(albumId);
   }
-
 }
