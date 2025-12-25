@@ -20,7 +20,7 @@ class PlaylistPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🔽 drag indicator
+          // drag indicator
           Center(
             child: Container(
               width: 40,
@@ -44,6 +44,15 @@ class PlaylistPage extends StatelessWidget {
             child: ValueListenableBuilder(
               valueListenable: playlist.playlist,
               builder: (_, songs, __) {
+                if (songs.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Chưa có bài nào trong danh sách',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   itemCount: songs.length,
                   itemBuilder: (context, index) {
@@ -52,34 +61,11 @@ class PlaylistPage extends StatelessWidget {
                         audio.currentSong.value?.audioNetwork ==
                             song.audioNetwork;
 
-                    return Dismissible(
-                      key: ValueKey(song.audioNetwork),
-                      direction: DismissDirection.horizontal,
-                      onDismissed: (_) {
-                        playlist.remove(song);
-                      },
-                      background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(left: 20),
-                        child: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      secondaryBackground: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        child: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        decoration: BoxDecoration(
-                          color: isPlaying
-                              ? Colors.green.withOpacity(0.08)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
+                    return ListTile(
+                      leading: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
                               song.image,
@@ -88,22 +74,29 @@ class PlaylistPage extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          title: Text(
-                            song.title,
-                            style: TextStyle(
-                              fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal,
-                              color: isPlaying ? Colors.amber : Colors.black,
-                            ),
-                          ),
-                          subtitle: Text(song.artist),
-                          trailing: isPlaying
-                              ? const Icon(Icons.graphic_eq, color: Colors.amberAccent)
-                              : null,
-                          onTap: () {
-                            playlist.playFromHere(song);
-                          },
+                          if (isPlaying)
+                            const Icon(Icons.equalizer,
+                                color: Colors.green),
+                        ],
+                      ),
+                      title: Text(
+                        song.title,
+                        style: TextStyle(
+                          fontWeight: isPlaying
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
+                      subtitle: Text(song.artist),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          playlist.remove(song);
+                        },
+                      ),
+                      onTap: () {
+                        playlist.playFromHere(song);
+                      },
                     );
                   },
                 );
