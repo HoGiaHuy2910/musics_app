@@ -115,7 +115,6 @@ class PlaylistController {
 
     if (index == -1) return;
 
-    playlist.value = list.sublist(index);
     AudioController.instance.playSong(song);
   }
 
