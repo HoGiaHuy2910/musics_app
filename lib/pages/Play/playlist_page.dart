@@ -61,42 +61,63 @@ class PlaylistPage extends StatelessWidget {
                         audio.currentSong.value?.audioNetwork ==
                             song.audioNetwork;
 
-                    return ListTile(
-                      leading: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              song.image,
-                              width: 48,
-                              height: 48,
-                              fit: BoxFit.cover,
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOut,
+                      margin: const EdgeInsets.only(bottom: 6),
+                      decoration: BoxDecoration(
+                        // ✅ ĐỔI NỀN SANG AMBER NHẠT
+                        color: isPlaying
+                            ? Colors.amber.withOpacity(0.12)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        leading: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Opacity(
+                                opacity: isPlaying ? 0.6 : 1.0,
+                                child: Image.network(
+                                  song.image,
+                                  width: 48,
+                                  height: 48,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                          if (isPlaying)
-                            const Icon(Icons.equalizer,
-                                color: Colors.green),
-                        ],
-                      ),
-                      title: Text(
-                        song.title,
-                        style: TextStyle(
-                          fontWeight: isPlaying
-                              ? FontWeight.bold
-                              : FontWeight.normal,
+                            if (isPlaying)
+                              const Icon(
+                                Icons.equalizer,
+                                color: Colors.amber,
+                              ),
+                          ],
                         ),
-                      ),
-                      subtitle: Text(song.artist),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          playlist.remove(song);
+
+                        // ❗️ GIỮ NGUYÊN MÀU TEXT
+                        title: Text(
+                          song.title,
+                          style: TextStyle(
+                            fontWeight: isPlaying
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        subtitle: Text(song.artist),
+
+                        trailing: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            playlist.remove(song);
+                          },
+                        ),
+
+                        onTap: () {
+                          playlist.playFromHere(song);
                         },
                       ),
-                      onTap: () {
-                        playlist.playFromHere(song);
-                      },
                     );
                   },
                 );
