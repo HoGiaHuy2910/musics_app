@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/song.dart';
+import '../../controllers/playlist_controller.dart';
 import '../ArtistDetail/artist_detail_page.dart';
 
 class ArtistsTab extends StatelessWidget {
@@ -12,16 +13,19 @@ class ArtistsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playlist = PlaylistController.instance;
+
     // Group theo artistId
     final Map<String, List<Song>> map = {};
-
     for (final s in songs) {
       map.putIfAbsent(s.artist, () => []);
       map[s.artist]!.add(s);
     }
 
     final artistGroups = map.entries.toList()
-      ..sort((a, b) => a.value.first.artist.compareTo(b.value.first.artist));
+      ..sort(
+            (a, b) => a.value.first.artist.compareTo(b.value.first.artist),
+      );
 
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 90),
@@ -32,7 +36,7 @@ class ArtistsTab extends StatelessWidget {
         final list = entry.value;
 
         final artistName = list.first.artist;
-        final artistAvatar = list.first.artistImage; // tạm lấy cover bài đầu
+        final artistAvatar = list.first.artistImage;
 
         return ListTile(
           leading: ClipRRect(
@@ -44,14 +48,54 @@ class ArtistsTab extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          title: Text(
-            artistName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+
+          // ===== TITLE: NAME + FOLLOW =====
+          title: Row(
+            children: [
+              // Artist name
+              Expanded(
+                child: Text(
+                  artistName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              // Follow text
+              ValueListenableBuilder(
+                valueListenable: playlist.followingArtists,
+                builder: (_, __, ___) {
+                  final isFollowing =
+                  playlist.isFollowingArtist(artistId);
+
+                  return GestureDetector(
+                    onTap: () {
+                      playlist.toggleFollowArtist(artistId);
+                    },
+                    child: Text(
+                      isFollowing ? 'Following' : 'Follow',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isFollowing
+                            ? Colors.amberAccent
+                            : Colors.grey,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
+
           subtitle: Text('${list.length} bài hát'),
+
+          // ===== GIỮ ICON MŨI TÊN CŨ =====
           trailing: const Icon(Icons.chevron_right),
+
           onTap: () {
             Navigator.push(
               context,

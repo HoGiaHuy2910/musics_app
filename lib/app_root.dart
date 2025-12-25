@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musics_app/pages/main_page.dart';
 
 import 'pages/Auth/login_page.dart';
 import 'pages/Home/home_page.dart';
@@ -19,7 +20,7 @@ class AppRoot extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          return const HomePage();
+          return const MainPage();
         }
 
         return const LoginPage();
