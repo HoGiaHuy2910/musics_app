@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     Widget sectionTitle(String text) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
@@ -57,25 +60,25 @@ class SettingsPage extends StatelessWidget {
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 32,
+                const CircleAvatar(
+                  radius: 50,
                   backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/150?img=3', // 👉 hình giả
+                    'https://res.cloudinary.com/dvlcxvr1i/image/upload/v1766678744/image1.jpg',
                   ),
                 ),
                 const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      'Hồ Gia Huy',
-                      style: TextStyle(
+                      user?.email ?? 'Unknown user',
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Text(
+                    const SizedBox(height: 4),
+                    const Text(
                       'Free account',
                       style: TextStyle(color: Colors.grey),
                     ),
@@ -148,7 +151,7 @@ class SettingsPage extends StatelessWidget {
           arrowTile(
             icon: Icons.email_outlined,
             title: 'Email',
-            subtitle: 'hogiahuy@example.com',
+            subtitle: user?.email ?? 'unknown@email.com',
           ),
 
           arrowTile(
@@ -191,6 +194,7 @@ class SettingsPage extends StatelessWidget {
 
           const Divider(),
 
+          // ================= LOGOUT =================
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: ElevatedButton.icon(
@@ -210,13 +214,8 @@ class SettingsPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Logout sẽ làm sau'),
-                    duration: Duration(milliseconds: 900),
-                  ),
-                );
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
               },
             ),
           ),
