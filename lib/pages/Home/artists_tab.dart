@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../data/mock_songs.dart';
 import '../../models/song.dart';
-import 'artist_detail_page.dart';
+import '../ArtistDetail/artist_detail_page.dart';
 
 class ArtistsTab extends StatelessWidget {
-  const ArtistsTab({super.key});
+  final List<Song> songs;
+
+  const ArtistsTab({
+    super.key,
+    required this.songs,
+  });
 
   @override
   Widget build(BuildContext context) {

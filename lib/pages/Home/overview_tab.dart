@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../data/mock_songs.dart';
 import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';
 import '../Play/now_playing_page.dart';
-import '../widgets/song_more_sheet.dart';
+import '../../models/song.dart';
 
 class OverviewTab extends StatelessWidget {
-  const OverviewTab({super.key});
+  final List<Song> songs;
+
+  const OverviewTab({
+    super.key,
+    required this.songs,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +143,7 @@ class OverviewTab extends StatelessWidget {
 
                               // ❤️ FAVORITE
                               ValueListenableBuilder(
-                                valueListenable:
-                                playlist.favorites,
+                                valueListenable: playlist.favorites,
                                 builder: (_, __, ___) {
                                   final isFav =
                                   playlist.isFavorite(song);
@@ -220,8 +223,9 @@ class OverviewTab extends StatelessWidget {
                             isFav
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color:
-                            isFav ? Colors.amberAccent : Colors.grey,
+                            color: isFav
+                                ? Colors.amberAccent
+                                : Colors.grey,
                             size: 20,
                           ),
                           onPressed: () =>

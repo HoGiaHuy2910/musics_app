@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../controllers/playlist_controller.dart';
 import '../../controllers/audio_controller.dart';
-import '../../data/mock_songs.dart';
 import '../../models/song.dart';
 import '../Play/now_playing_page.dart';
 
 class LikedSongsTab extends StatelessWidget {
-  const LikedSongsTab({super.key});
+  final List<Song> songs;
+
+  const LikedSongsTab({
+    super.key,
+    required this.songs,
+  });
 
   @override
   Widget build(BuildContext context) {

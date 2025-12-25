@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../controllers/playlist_controller.dart';
-import '../../data/mock_songs.dart';
-import '../Home/album_detail_page.dart';
+import '../AlbumDetail/album_detail_page.dart';
+import '../../models/song.dart';
 
 class LikedAlbumsTab extends StatelessWidget {
-  const LikedAlbumsTab({super.key});
+  final List<Song> songs;
+
+  const LikedAlbumsTab({
+    super.key,
+    required this.songs,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,7 @@ class LikedAlbumsTab extends StatelessWidget {
         }
 
         // 🔥 GROUP SONGS THEO ALBUM
-        final albums = <String, List>{};
+        final albums = <String, List<Song>>{};
 
         for (final song in songs) {
           if (favAlbumIds.contains(song.albumId)) {
@@ -64,7 +69,7 @@ class LikedAlbumsTab extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => AlbumDetailPage(
                       albumTitle: albumTitle,
-                      songs: List.from(albumSongs),
+                      songs: List<Song>.from(albumSongs),
                     ),
                   ),
                 );

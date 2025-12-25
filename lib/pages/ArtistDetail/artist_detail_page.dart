@@ -5,7 +5,6 @@ import '../../models/song.dart';
 import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';
 import '../Play/now_playing_page.dart';
-import '../widgets/song_more_sheet.dart';
 
 class ArtistDetailPage extends StatefulWidget {
   final String artistId;
