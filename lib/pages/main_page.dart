@@ -4,6 +4,7 @@ import 'Like/like_page.dart';
 import 'placeholder_page.dart';
 import 'widgets/mini_player.dart';
 import 'Settings/settings_page.dart';
+import 'Following/following_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,7 +19,7 @@ class _MainPageState extends State<MainPage> {
   final pages = const [
     HomePage(),
     LikePage(),
-    PlaceholderPage(title: 'Following'),
+    FollowingPage(),
     SettingsPage(),
   ];
 
