@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/song.dart';
 import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';
-import '../now_playing_page.dart';
+import '../Play/now_playing_page.dart';
 import '../widgets/song_more_sheet.dart';
 
 class AlbumDetailPage extends StatelessWidget {

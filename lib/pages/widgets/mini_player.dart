@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/controllers/audio_controller.dart';
-import '../now_playing_page.dart';
+import '../Play/now_playing_page.dart';
 
 class MiniPlayer extends StatelessWidget {
   const MiniPlayer({super.key});

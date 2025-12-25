@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/song.dart';
-import '../controllers/audio_controller.dart';
+import '../../models/song.dart';
+import '../../controllers/audio_controller.dart';
 import 'playlist_page.dart';
 
 class NowPlayingPage extends StatefulWidget {

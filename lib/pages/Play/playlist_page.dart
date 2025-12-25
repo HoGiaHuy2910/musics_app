@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../controllers/playlist_controller.dart';
-import '../controllers/audio_controller.dart';
+import '../../controllers/playlist_controller.dart';
+import '../../controllers/audio_controller.dart';
 
 class PlaylistPage extends StatelessWidget {
   const PlaylistPage({super.key});

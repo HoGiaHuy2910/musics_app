@@ -3,7 +3,7 @@ import '../../controllers/playlist_controller.dart';
 import '../../controllers/audio_controller.dart';
 import '../../data/mock_songs.dart';
 import '../../models/song.dart';
-import '../now_playing_page.dart';
+import '../Play/now_playing_page.dart';
 
 class LikedSongsTab extends StatelessWidget {
   const LikedSongsTab({super.key});
