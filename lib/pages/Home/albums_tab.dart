@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/mock_songs.dart';
 import '../../models/song.dart';
+import '../../controllers/playlist_controller.dart';
 import 'album_detail_page.dart';
 
 class AlbumsTab extends StatelessWidget {
@@ -8,6 +9,8 @@ class AlbumsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playlist = PlaylistController.instance;
+
     // 🔥 Group songs theo albumId
     final Map<String, List<Song>> albums = {};
 
@@ -46,14 +49,57 @@ class AlbumsTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🖼 ALBUM COVER
+              // ===== ALBUM COVER + ❤️ =====
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    album.image,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    children: [
+                      // 🖼 COVER
+                      Positioned.fill(
+                        child: Image.network(
+                          album.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+
+                      // ❤️ FAVORITE ALBUM
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: ValueListenableBuilder(
+                          valueListenable: playlist.favoriteAlbums,
+                          builder: (_, __, ___) {
+                            final isFav = playlist
+                                .isFavoriteAlbum(album.albumId);
+
+                            return GestureDetector(
+                              onTap: () {
+                                playlist.toggleFavoriteAlbum(
+                                  album.albumId,
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.45),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  isFav
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isFav
+                                      ? Colors.amberAccent
+                                      : Colors.white,
+                                  size: 18,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

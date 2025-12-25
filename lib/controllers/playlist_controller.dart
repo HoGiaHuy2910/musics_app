@@ -102,4 +102,26 @@ class PlaylistController {
   bool isFavorite(Song song) {
     return favorites.value.contains(song.Songid);
   }
+
+  /// 💿 FAVORITE ALBUMS
+  final ValueNotifier<Set<String>> favoriteAlbums =
+  ValueNotifier<Set<String>>({});
+
+  // ❤️ TOGGLE FAVORITE ALBUM
+  void toggleFavoriteAlbum(String albumId) {
+    final favs = favoriteAlbums.value;
+
+    if (favs.contains(albumId)) {
+      favs.remove(albumId);
+    } else {
+      favs.add(albumId);
+    }
+
+    favoriteAlbums.value = {...favs};
+  }
+
+  bool isFavoriteAlbum(String albumId) {
+    return favoriteAlbums.value.contains(albumId);
+  }
+
 }
