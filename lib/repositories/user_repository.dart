@@ -11,6 +11,7 @@ class UserRepository {
     if (!snap.exists) {
       await ref.set({
         'email': user.email,
+        'accImage': 'https://i.pravatar.cc/300?u=${user.uid}', // 👈 DEFAULT
         'createdAt': FieldValue.serverTimestamp(),
         'favoriteSongs': [],
         'favoriteAlbums': [],

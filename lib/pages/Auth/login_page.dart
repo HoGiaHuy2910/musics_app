@@ -21,6 +21,16 @@ class _LoginPageState extends State<LoginPage> {
   final _userRepo = UserRepository();
 
   Future<void> _submit() async {
+    final email = _emailCtrl.text.trim();
+    final password = _passwordCtrl.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _error = 'Email and password cannot be empty';
+      });
+      return;
+    }
+
     setState(() {
       _loading = true;
       _error = null;
@@ -30,32 +40,37 @@ class _LoginPageState extends State<LoginPage> {
       UserCredential cred;
 
       if (_isLogin) {
+        // 🔐 LOGIN
         cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailCtrl.text.trim(),
-          password: _passwordCtrl.text.trim(),
+          email: email,
+          password: password,
         );
       } else {
+        // 🆕 REGISTER
         cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailCtrl.text.trim(),
-          password: _passwordCtrl.text.trim(),
+          email: email,
+          password: password,
         );
       }
 
-      // 🔥 TẠO DOCUMENT users/uid NẾU CHƯA CÓ
+      // 🔥 ĐẢM BẢO USER DOCUMENT TỒN TẠI
+      // (Repo phải tự check exists)
       await _userRepo.createUserIfNotExists(cred.user!);
 
       // ❗ KHÔNG Navigator
       // AppRoot sẽ tự điều hướng
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _error = e.message;
+        _error = e.message ?? 'Authentication failed';
       });
-    } catch (e) {
+    } catch (_) {
       setState(() {
         _error = 'Something went wrong';
       });
     } finally {
-      setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
@@ -111,26 +126,41 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 16),
 
               if (_error != null)
-                Text(
-                  _error!,
-                  style: const TextStyle(color: Colors.red),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _loading ? null : _submit,
                   child: _loading
-                      ? const CircularProgressIndicator(color: Colors.white)
+                      ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
                       : Text(_isLogin ? 'Login' : 'Register'),
                 ),
               ),
 
               TextButton(
-                onPressed: () {
-                  setState(() => _isLogin = !_isLogin);
+                onPressed: _loading
+                    ? null
+                    : () {
+                  setState(() {
+                    _isLogin = !_isLogin;
+                    _error = null;
+                  });
                 },
                 child: Text(
                   _isLogin

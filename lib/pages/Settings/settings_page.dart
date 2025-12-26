@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../Like/like_page.dart';
+import '../Following/following_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -10,14 +14,14 @@ class SettingsPage extends StatelessWidget {
 
     Widget sectionTitle(String text) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
         child: Text(
           text.toUpperCase(),
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
             color: Colors.grey,
-            letterSpacing: 0.8,
+            letterSpacing: 1,
           ),
         ),
       );
@@ -27,201 +31,217 @@ class SettingsPage extends StatelessWidget {
       required IconData icon,
       required String title,
       String? subtitle,
+      VoidCallback? onTap,
     }) {
       return ListTile(
         leading: Icon(icon),
-        title: Text(title),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 16),
+        ),
         subtitle: subtitle != null ? Text(subtitle) : null,
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$title sẽ làm sau'),
-              duration: const Duration(milliseconds: 900),
-            ),
-          );
-        },
+        onTap: onTap,
+      );
+    }
+
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: Text('No user logged in')),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(
+          'Settings',
+          style: TextStyle(
+            fontSize: 28, // 🔥 TĂNG SIZE
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: ListView(
-        children: [
-          // ================= ACCOUNT =================
-          Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(
-                    'https://res.cloudinary.com/dvlcxvr1i/image/upload/v1766678744/image1.jpg',
-                  ),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final data = snapshot.data!.data() as Map<String, dynamic>?;
+
+          final displayName =
+              data?['displayName'] ?? user.email ?? 'Unknown user';
+          final accImage = data?['accImage'] as String?;
+
+          return ListView(
+            children: [
+              // ================= ACCOUNT =================
+              Container(
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.amberAccent.withOpacity(0.3), // 🎨 BẠN ĐỔI MÀU TẠI ĐÂY
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      user?.email ?? 'Unknown user',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    CircleAvatar(
+                      radius: 42,
+                      backgroundColor: Colors.grey.shade300,
+                      backgroundImage:
+                      accImage != null ? NetworkImage(accImage) : null,
+                      child: accImage == null
+                          ? const Icon(Icons.person, size: 42)
+                          : null,
+                    ),
+                    const SizedBox(width: 18),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            displayName,
+                            style: const TextStyle(
+                              fontSize: 20, // 🔥 TĂNG SIZE
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            user.email ?? '',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Free account',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    const Icon(Icons.chevron_right),
                   ],
                 ),
-                const Spacer(),
-                const Icon(Icons.chevron_right),
-              ],
-            ),
-          ),
+              ),
 
-          // ================= APPEARANCE =================
-          sectionTitle('Appearance'),
+              // ================= APPEARANCE =================
+              sectionTitle('Appearance'),
 
-          SwitchListTile(
-            secondary: const Icon(Icons.dark_mode_outlined),
-            title: const Text('Dark mode'),
-            subtitle: const Text('Giao diện tối'),
-            value: false,
-            onChanged: (_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Dark mode sẽ làm sau'),
-                  duration: Duration(milliseconds: 800),
-                ),
-              );
-            },
-          ),
+              SwitchListTile(
+                secondary: const Icon(Icons.dark_mode_outlined),
+                title: const Text('Dark mode'),
+                subtitle: const Text('Giao diện tối'),
+                value: false,
+                onChanged: (_) {},
+              ),
 
-          arrowTile(
-            icon: Icons.palette_outlined,
-            title: 'Theme color',
-            subtitle: 'Màu chủ đạo',
-          ),
+              arrowTile(
+                icon: Icons.text_fields,
+                title: 'Font size',
+                subtitle: 'Kích thước chữ',
+              ),
 
-          arrowTile(
-            icon: Icons.text_fields,
-            title: 'Font size',
-            subtitle: 'Kích thước chữ',
-          ),
+              const Divider(),
 
-          const Divider(),
+              // ================= LIBRARY =================
+              sectionTitle('Library'),
 
-          // ================= LIBRARY =================
-          sectionTitle('Library'),
+              arrowTile(
+                icon: Icons.favorite_border,
+                title: 'Favorites',
+                subtitle: 'Bài hát & album đã thích',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LikePage()),
+                  );
+                },
+              ),
 
-          arrowTile(
-            icon: Icons.favorite_border,
-            title: 'Favorites',
-            subtitle: 'Bài hát & album đã thích',
-          ),
+              arrowTile(
+                icon: Icons.queue_music,
+                title: 'My playlists',
+                subtitle: 'Tạo playlist theo sở thích của bạn',
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Tính năng playlist sẽ được cập nhật sau'),
+                      duration: Duration(milliseconds: 900),
+                    ),
+                  );
+                },
+              ),
 
-          arrowTile(
-            icon: Icons.queue_music,
-            title: 'Playlists',
-            subtitle: 'Danh sách phát của bạn',
-          ),
+              arrowTile(
+                icon: Icons.person_outline,
+                title: 'Following artists',
+                subtitle: 'Nghệ sĩ bạn quan tâm',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const FollowingPage()),
+                  );
+                },
+              ),
 
-          arrowTile(
-            icon: Icons.person_outline,
-            title: 'Following artists',
-            subtitle: 'Nghệ sĩ bạn quan tâm',
-          ),
+              const Divider(),
 
-          const Divider(),
+              // ================= ABOUT =================
+              sectionTitle('About'),
 
-          // ================= CONTACT =================
-          sectionTitle('Contact'),
+              const ListTile(
+                leading: Icon(Icons.info_outline),
+                title: Text('App version'),
+                trailing: Text('1.0.0'),
+              ),
 
-          arrowTile(
-            icon: Icons.email_outlined,
-            title: 'Email',
-            subtitle: user?.email ?? 'unknown@email.com',
-          ),
+              arrowTile(
+                icon: Icons.privacy_tip_outlined,
+                title: 'Privacy policy',
+              ),
 
-          arrowTile(
-            icon: Icons.support_agent_outlined,
-            title: 'Support',
-            subtitle: 'Liên hệ hỗ trợ',
-          ),
+              arrowTile(
+                icon: Icons.description_outlined,
+                title: 'Terms of service',
+              ),
 
-          arrowTile(
-            icon: Icons.bug_report_outlined,
-            title: 'Report a bug',
-            subtitle: 'Báo lỗi ứng dụng',
-          ),
+              arrowTile(
+                icon: Icons.code,
+                title: 'Open source licenses',
+              ),
 
-          const Divider(),
+              const Divider(),
 
-          // ================= ABOUT =================
-          sectionTitle('About'),
-
-          const ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('App version'),
-            trailing: Text('1.0.0'),
-          ),
-
-          arrowTile(
-            icon: Icons.privacy_tip_outlined,
-            title: 'Privacy policy',
-          ),
-
-          arrowTile(
-            icon: Icons.description_outlined,
-            title: 'Terms of service',
-          ),
-
-          arrowTile(
-            icon: Icons.code,
-            title: 'Open source licenses',
-          ),
-
-          const Divider(),
-
-          // ================= LOGOUT =================
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amberAccent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+              // ================= LOGOUT =================
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amberAccent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.logout),
+                  label: const Text(
+                    'Log out',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                  },
                 ),
               ),
-              icon: const Icon(Icons.logout),
-              label: const Text(
-                'Log out',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-            ),
-          ),
 
-          const SizedBox(height: 32),
-        ],
+              const SizedBox(height: 32),
+            ],
+          );
+        },
       ),
     );
   }
