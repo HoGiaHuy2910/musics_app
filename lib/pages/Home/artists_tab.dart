@@ -71,18 +71,37 @@ class ArtistsTab extends StatelessWidget {
                   final isFollowing =
                   playlist.isFollowingArtist(artistId);
 
-                  return GestureDetector(
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(999),
                     onTap: () {
                       playlist.toggleFollowArtist(artistId);
                     },
-                    child: Text(
-                      isFollowing ? 'Following' : 'Follow',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color: isFollowing
+                              ? Colors.grey
+                              : Colors.grey,
+                          width: 1.5,
+                        ),
                         color: isFollowing
-                            ? Colors.amberAccent
-                            : Colors.grey,
+                            ? Colors.amberAccent.withOpacity(0.1)
+                            : Colors.transparent,
+                      ),
+                      child: Text(
+                        isFollowing ? 'Following' : 'Follow',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: isFollowing
+                              ? Colors.amber
+                              : Colors.grey,
+                        ),
                       ),
                     ),
                   );
