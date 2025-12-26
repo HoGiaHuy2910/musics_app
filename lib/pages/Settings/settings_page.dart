@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../Like/like_page.dart';
 import '../Following/following_page.dart';
+import '../Profile/edit_profile_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -56,7 +57,7 @@ class SettingsPage extends StatelessWidget {
         title: const Text(
           'Settings',
           style: TextStyle(
-            fontSize: 28, // 🔥 TĂNG SIZE
+            fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -80,46 +81,57 @@ class SettingsPage extends StatelessWidget {
           return ListView(
             children: [
               // ================= ACCOUNT =================
-              Container(
-                margin: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.amberAccent.withOpacity(0.3), // 🎨 BẠN ĐỔI MÀU TẠI ĐÂY
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 42,
-                      backgroundColor: Colors.grey.shade300,
-                      backgroundImage:
-                      accImage != null ? NetworkImage(accImage) : null,
-                      child: accImage == null
-                          ? const Icon(Icons.person, size: 42)
-                          : null,
+              InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EditProfilePage(),
                     ),
-                    const SizedBox(width: 18),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            displayName,
-                            style: const TextStyle(
-                              fontSize: 20, // 🔥 TĂNG SIZE
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            user.email ?? '',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.amberAccent.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 42,
+                        backgroundColor: Colors.grey.shade300,
+                        backgroundImage:
+                        accImage != null ? NetworkImage(accImage) : null,
+                        child: accImage == null
+                            ? const Icon(Icons.person, size: 42)
+                            : null,
                       ),
-                    ),
-                    const Icon(Icons.chevron_right),
-                  ],
+                      const SizedBox(width: 18),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              displayName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              user.email ?? '',
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
                 ),
               ),
 
@@ -178,7 +190,9 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const FollowingPage()),
+                    MaterialPageRoute(
+                      builder: (_) => const FollowingPage(),
+                    ),
                   );
                 },
               ),
