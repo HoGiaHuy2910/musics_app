@@ -19,7 +19,10 @@ class FollowingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Following',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 28, // 🔥 to hơn
+          ),
         ),
       ),
       body: ValueListenableBuilder<Set<String>>(
@@ -75,19 +78,32 @@ class FollowingPage extends StatelessWidget {
                   final albums = albumMap.values.toList();
 
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 32),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ===== ARTIST HEADER =====
+                        // ===== ARTIST HEADER (TO HƠN) =====
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                           child: Text(
                             artistName,
                             style: const TextStyle(
-                              fontSize: 22,
+                              fontSize: 22, // 🔥 to rõ
                               fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        // ===== SONGS TITLE =====
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
+                          child: Text(
+                            'Songs',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                              letterSpacing: 0.6,
                             ),
                           ),
                         ),
@@ -148,7 +164,20 @@ class FollowingPage extends StatelessWidget {
 
                         // ===== ALBUMS =====
                         if (albums.isNotEmpty) ...[
-                          const SizedBox(height: 8),
+                          const Padding(
+                            padding:
+                            EdgeInsets.fromLTRB(16, 12, 16, 8),
+                            child: Text(
+                              'Albums',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber,
+                                letterSpacing: 0.6,
+                              ),
+                            ),
+                          ),
+
                           SizedBox(
                             height: 180,
                             child: ListView.builder(
