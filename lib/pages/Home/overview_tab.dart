@@ -3,6 +3,8 @@ import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';
 import '../Play/now_playing_page.dart';
 import '../../models/song.dart';
+import '../ArtistDetail/artist_detail_page.dart';
+import '../widgets/add_to_playlist_sheet.dart';
 
 class OverviewTab extends StatelessWidget {
   final List<Song> songs;
@@ -128,9 +130,10 @@ class OverviewTab extends StatelessWidget {
 
                               const SizedBox(width: 24),
 
+                              // ➕ ADD TO QUEUE
                               InkWell(
                                 onTap: () {
-                                  PlaylistController.instance.add(song);
+                                  playlist.add(song);
                                 },
                                 child: const Icon(
                                   Icons.playlist_add,
@@ -209,10 +212,11 @@ class OverviewTab extends StatelessWidget {
                 title: Text(song.title),
                 subtitle: Text(song.artist),
 
-                // ❤️ + ⋮
+                // ❤️ + ➕ + ⋮
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // ❤️ FAVORITE
                     ValueListenableBuilder(
                       valueListenable: playlist.favorites,
                       builder: (_, __, ___) {
@@ -233,11 +237,70 @@ class OverviewTab extends StatelessWidget {
                         );
                       },
                     ),
+
+                    // ➕ ADD TO QUEUE
                     IconButton(
                       icon: const Icon(Icons.playlist_add),
                       onPressed: () {
-                        PlaylistController.instance.add(song);
+                        playlist.add(song);
                       },
+                    ),
+
+                    // ⋮ MORE
+                    PopupMenuButton<_SongMenuAction>(
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (action) {
+                        switch (action) {
+                          case _SongMenuAction.addToPlaylist:
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                              ),
+                              builder: (_) =>
+                                  AddToPlaylistSheet(
+                                      songId: song.Songid),
+                            );
+                            break;
+
+                          case _SongMenuAction.viewArtist:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ArtistDetailPage(
+                                  artistId: song.artist,
+                                  artistName: song.artist,
+                                  artistImageUrl:
+                                  song.artistImage,
+                                  songs: songs
+                                      .where((s) =>
+                                  s.artist == song.artist)
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                            break;
+                        }
+                      },
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(
+                          value:
+                          _SongMenuAction.addToPlaylist,
+                          child: ListTile(
+                            leading:
+                            Icon(Icons.library_add),
+                            title: Text('Add to myplaylist'),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: _SongMenuAction.viewArtist,
+                          child: ListTile(
+                            leading: Icon(Icons.person),
+                            title: Text('View artist'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -247,7 +310,8 @@ class OverviewTab extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => NowPlayingPage(song: song),
+                      builder: (_) =>
+                          NowPlayingPage(song: song),
                     ),
                   );
                 },
@@ -258,4 +322,9 @@ class OverviewTab extends StatelessWidget {
       ),
     );
   }
+}
+
+enum _SongMenuAction {
+  addToPlaylist,
+  viewArtist,
 }
