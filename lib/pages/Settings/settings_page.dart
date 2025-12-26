@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import '../Playlist/my_playlists_page.dart';
 import '../Like/like_page.dart';
 import '../Following/following_page.dart';
 import '../Profile/edit_profile_page.dart';
@@ -174,10 +174,10 @@ class SettingsPage extends StatelessWidget {
                 title: 'My playlists',
                 subtitle: 'Tạo playlist theo sở thích của bạn',
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Tính năng playlist sẽ được cập nhật sau'),
-                      duration: Duration(milliseconds: 900),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MyPlaylistsPage(),
                     ),
                   );
                 },
