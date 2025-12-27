@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../Playlist/playlist_detail_page.dart';
 
 class MyPlaylistsPage extends StatelessWidget {
@@ -26,10 +27,7 @@ class MyPlaylistsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'My playlists',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
 
@@ -48,18 +46,12 @@ class MyPlaylistsPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(
-                      Icons.queue_music,
-                      size: 72,
-                      color: Colors.grey,
-                    ),
+                    Icon(Icons.queue_music, size: 72, color: Colors.grey),
                     SizedBox(height: 16),
                     Text(
                       'Chưa có playlist nào',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 6),
                     Text(
@@ -80,8 +72,7 @@ class MyPlaylistsPage extends StatelessWidget {
             itemBuilder: (context, index) {
               final doc = snapshot.data!.docs[index];
               final data = doc.data() as Map<String, dynamic>;
-              final songCount =
-                  (data['songs'] as List?)?.length ?? 0;
+              final songCount = (data['songs'] as List?)?.length ?? 0;
 
               return InkWell(
                 borderRadius: BorderRadius.circular(16),
@@ -125,8 +116,7 @@ class MyPlaylistsPage extends StatelessWidget {
                       // 📄 INFO
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               data['name'] ?? 'Untitled',
@@ -149,9 +139,41 @@ class MyPlaylistsPage extends StatelessWidget {
                         ),
                       ),
 
-                      const Icon(
-                        Icons.chevron_right,
-                        color: Colors.grey,
+                      // ===== MORE MENU =====
+                      PopupMenuButton<String>(
+                        onSelected: (value) {
+                          if (value == 'rename') {
+                            _showRenameDialog(
+                              context,
+                              user.uid,
+                              doc.id,
+                              data['name'],
+                            );
+                          } else if (value == 'delete') {
+                            _showDeleteDialog(
+                              context,
+                              user.uid,
+                              doc.id,
+                            );
+                          }
+                        },
+                        itemBuilder: (_) => const [
+                          PopupMenuItem(
+                            value: 'rename',
+                            child: Text('Rename'),
+                          ),
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                        child: const Icon(
+                          Icons.more_vert,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -162,12 +184,17 @@ class MyPlaylistsPage extends StatelessWidget {
         },
       ),
 
-      // ===== CREATE PLAYLIST FAB =====
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.amberAccent, // 🎨 MÀU NỀN
+        foregroundColor: Colors.black,       // 🎨 MÀU ICON + TEXT
+        elevation: 4,
         icon: const Icon(Icons.add),
         label: const Text(
           'New playlist',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
         ),
         onPressed: () {
           _showCreateDialog(context);
@@ -176,54 +203,131 @@ class MyPlaylistsPage extends StatelessWidget {
     );
   }
 
-  // ================= CREATE PLAYLIST DIALOG =================
+  // ================= CREATE =================
   void _showCreateDialog(BuildContext context) {
     final ctrl = TextEditingController();
+    final user = FirebaseAuth.instance.currentUser!;
 
     showDialog(
       context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: const Text(
-            'Create playlist',
-            style: TextStyle(fontWeight: FontWeight.bold),
+      builder: (_) => AlertDialog(
+        title: const Text('Create playlist'),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Playlist name',
+            border: OutlineInputBorder(),
           ),
-          content: TextField(
-            controller: ctrl,
-            autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Playlist name',
-              border: OutlineInputBorder(),
-            ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final user = FirebaseAuth.instance.currentUser!;
-                final name = ctrl.text.trim();
-                if (name.isEmpty) return;
+          ElevatedButton(
+            onPressed: () async {
+              final name = ctrl.text.trim();
+              if (name.isEmpty) return;
 
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(user.uid)
-                    .collection('playlists')
-                    .add({
-                  'name': name,
-                  'songs': [],
-                  'createdAt': FieldValue.serverTimestamp(),
-                });
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user.uid)
+                  .collection('playlists')
+                  .add({
+                'name': name,
+                'songs': [],
+                'createdAt': FieldValue.serverTimestamp(),
+              });
 
-                Navigator.pop(context);
-              },
-              child: const Text('Create'),
-            ),
-          ],
-        );
-      },
+              Navigator.pop(context);
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ================= RENAME =================
+  void _showRenameDialog(
+      BuildContext context,
+      String uid,
+      String playlistId,
+      String oldName,
+      ) {
+    final ctrl = TextEditingController(text: oldName);
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Rename playlist'),
+        content: TextField(
+          controller: ctrl,
+          decoration: const InputDecoration(
+            labelText: 'Playlist name',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final newName = ctrl.text.trim();
+              if (newName.isEmpty) return;
+
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .collection('playlists')
+                  .doc(playlistId)
+                  .update({'name': newName});
+
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ================= DELETE =================
+  void _showDeleteDialog(
+      BuildContext context,
+      String uid,
+      String playlistId,
+      ) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete playlist'),
+        content: const Text(
+          'Playlist sẽ bị xóa vĩnh viễn. Bạn chắc chắn?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .collection('playlists')
+                  .doc(playlistId)
+                  .delete();
+
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
     );
   }
 }

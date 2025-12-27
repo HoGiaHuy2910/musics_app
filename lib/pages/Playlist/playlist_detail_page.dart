@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../models/song.dart';
 import '../../repositories/song_repository.dart';
+import '../../repositories/playlist_repository.dart';
 import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';
 import '../Play/now_playing_page.dart';
@@ -22,6 +23,7 @@ class PlaylistDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final songRepo = SongRepository();
+    final playlistRepo = PlaylistRepository();
     final audio = AudioController.instance;
     final playlistController = PlaylistController.instance;
 
@@ -60,12 +62,7 @@ class PlaylistDetailPage extends StatelessWidget {
                     expandedHeight: 220,
                     pinned: true,
                     backgroundColor: Colors.black,
-
-                    // 🔙 BACK ICON COLOR
-                    iconTheme: const IconThemeData(
-                      color: Colors.white,
-                    ),
-
+                    iconTheme: const IconThemeData(color: Colors.white),
                     flexibleSpace: FlexibleSpaceBar(
                       title: Text(
                         playlistName,
@@ -106,7 +103,6 @@ class PlaylistDetailPage extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                       child: Row(
                         children: [
-                          // ▶️ PLAY ALL
                           Expanded(
                             child: ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
@@ -121,9 +117,7 @@ class PlaylistDetailPage extends StatelessWidget {
                               icon: const Icon(Icons.play_arrow),
                               label: const Text(
                                 'Play all',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               onPressed: playlistSongs.isEmpty
                                   ? null
@@ -135,23 +129,22 @@ class PlaylistDetailPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => NowPlayingPage(
-                                      song: playlistSongs.first,
-                                    ),
+                                    builder: (_) =>
+                                        NowPlayingPage(
+                                          song: playlistSongs.first,
+                                        ),
                                   ),
                                 );
                               },
                             ),
                           ),
                           const SizedBox(width: 12),
-
-                          // 🔀 SHUFFLE
                           Expanded(
                             child: OutlinedButton.icon(
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.amberAccent,
+                                foregroundColor: Colors.amber,
                                 side: const BorderSide(
-                                  color: Colors.amberAccent,
+                                  color: Colors.amber,
                                   width: 1.5,
                                 ),
                                 padding:
@@ -163,9 +156,7 @@ class PlaylistDetailPage extends StatelessWidget {
                               icon: const Icon(Icons.shuffle),
                               label: const Text(
                                 'Shuffle',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               onPressed: playlistSongs.isEmpty
                                   ? null
@@ -177,9 +168,10 @@ class PlaylistDetailPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => NowPlayingPage(
-                                      song: list.first,
-                                    ),
+                                    builder: (_) =>
+                                        NowPlayingPage(
+                                          song: list.first,
+                                        ),
                                   ),
                                 );
                               },
@@ -202,10 +194,8 @@ class PlaylistDetailPage extends StatelessWidget {
                             SizedBox(height: 12),
                             Text(
                               'Playlist chưa có bài hát nào',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                              ),
+                              style:
+                              TextStyle(color: Colors.grey, fontSize: 16),
                             ),
                           ],
                         ),
@@ -236,10 +226,8 @@ class PlaylistDetailPage extends StatelessWidget {
                                   ),
                                 ),
                                 if (isPlaying)
-                                  const Icon(
-                                    Icons.equalizer,
-                                    color: Colors.green,
-                                  ),
+                                  const Icon(Icons.equalizer,
+                                      color: Colors.amberAccent, size: 26),
                               ],
                             ),
                             title: Text(
@@ -251,6 +239,26 @@ class PlaylistDetailPage extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(song.artist),
+
+                            trailing: PopupMenuButton<String>(
+                              onSelected: (value) async {
+                                if (value == 'remove') {
+                                  await playlistRepo
+                                      .removeSongFromPlaylist(
+                                    playlistId: playlistId,
+                                    songId: song.Songid,
+                                  );
+                                }
+                              },
+                              itemBuilder: (_) =>
+                              const [
+                                PopupMenuItem(
+                                  value: 'remove',
+                                  child: Text('Remove from playlist'),
+                                ),
+                              ],
+                            ),
+
                             onTap: () {
                               playlistController.ensureInPlaylist(song);
                               audio.playSong(song);
