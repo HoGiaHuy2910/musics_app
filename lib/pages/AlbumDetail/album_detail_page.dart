@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-
 import '../../models/song.dart';
 import '../../controllers/audio_controller.dart';
 import '../../controllers/playlist_controller.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Home/home_page.dart';
 import 'Like/like_page.dart';
-import 'placeholder_page.dart';
 import 'widgets/mini_player.dart';
 import 'Settings/settings_page.dart';
 import 'Following/following_page.dart';

@@ -6,6 +6,7 @@ import '../Like/like_page.dart';
 import '../Following/following_page.dart';
 import '../Profile/edit_profile_page.dart';
 import '../../main.dart';
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
