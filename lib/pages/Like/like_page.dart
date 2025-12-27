@@ -44,6 +44,8 @@ class LikePage extends StatelessWidget {
                 isScrollable: true,
                 indicatorColor: Colors.amber,
                 indicatorWeight: 3,
+                labelColor: Colors.amber,
+                unselectedLabelColor: Colors.grey,
                 labelStyle: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

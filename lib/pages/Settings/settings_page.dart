@@ -5,7 +5,7 @@ import '../Playlist/my_playlists_page.dart';
 import '../Like/like_page.dart';
 import '../Following/following_page.dart';
 import '../Profile/edit_profile_page.dart';
-
+import '../../main.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -138,22 +138,16 @@ class SettingsPage extends StatelessWidget {
               // ================= APPEARANCE =================
               sectionTitle('Appearance'),
 
+              /// 🌙 DARK MODE
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode_outlined),
                 title: const Text('Dark mode'),
                 subtitle: const Text('Giao diện tối'),
-                value: false,
-                onChanged: (_) {},
+                value: Theme.of(context).brightness == Brightness.dark,
+                onChanged: (value) {
+                  MyApp.of(context).toggleDarkMode(value);
+                },
               ),
-
-              arrowTile(
-                icon: Icons.text_fields,
-                title: 'Font size',
-                subtitle: 'Kích thước chữ',
-              ),
-
-              const Divider(),
-
               // ================= LIBRARY =================
               sectionTitle('Library'),
 

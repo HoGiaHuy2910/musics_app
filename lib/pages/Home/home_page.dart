@@ -99,14 +99,14 @@ class _HomePageState extends State<HomePage> {
                 isScrollable: true,
                 indicatorColor: Colors.amber,
                 indicatorWeight: 3,
-                labelColor: Colors.black,
+                labelColor: Colors.amber,
                 unselectedLabelColor: Colors.grey,
                 labelStyle: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
                 unselectedLabelStyle: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
                 tabs: [
                   Tab(text: 'Overview'),

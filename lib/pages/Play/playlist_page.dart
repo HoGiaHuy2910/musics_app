@@ -9,33 +9,46 @@ class PlaylistPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final playlist = PlaylistController.instance;
     final audio = AudioController.instance;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF121212) // dark nền queue
+            : Colors.white,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // drag indicator
+          // ===== DRAG INDICATOR =====
           Center(
             child: Container(
               width: 40,
               height: 4,
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: Colors.grey.shade400,
+                color: isDark
+                    ? Colors.grey.shade700
+                    : Colors.grey.shade400,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
           ),
 
-          const Text(
+          // ===== TITLE =====
+          Text(
             'Danh sách phát',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black,
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -45,10 +58,14 @@ class PlaylistPage extends StatelessWidget {
               valueListenable: playlist.playlist,
               builder: (_, songs, __) {
                 if (songs.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       'Chưa có bài nào trong danh sách',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: isDark
+                            ? Colors.grey.shade500
+                            : Colors.grey,
+                      ),
                     ),
                   );
                 }
@@ -66,9 +83,10 @@ class PlaylistPage extends StatelessWidget {
                       curve: Curves.easeOut,
                       margin: const EdgeInsets.only(bottom: 6),
                       decoration: BoxDecoration(
-                        // ✅ ĐỔI NỀN SANG AMBER NHẠT
                         color: isPlaying
-                            ? Colors.amber.withOpacity(0.12)
+                            ? Colors.amber.withOpacity(
+                          isDark ? 0.18 : 0.12,
+                        )
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -96,19 +114,33 @@ class PlaylistPage extends StatelessWidget {
                           ],
                         ),
 
-                        // ❗️ GIỮ NGUYÊN MÀU TEXT
                         title: Text(
                           song.title,
                           style: TextStyle(
                             fontWeight: isPlaying
                                 ? FontWeight.bold
                                 : FontWeight.normal,
+                            color: isDark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
-                        subtitle: Text(song.artist),
+                        subtitle: Text(
+                          song.artist,
+                          style: TextStyle(
+                            color: isDark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade700,
+                          ),
+                        ),
 
                         trailing: IconButton(
-                          icon: const Icon(Icons.close),
+                          icon: Icon(
+                            Icons.close,
+                            color: isDark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade700,
+                          ),
                           onPressed: () {
                             playlist.remove(song);
                           },
