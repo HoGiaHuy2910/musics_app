@@ -10,6 +10,7 @@ class MyPlaylistsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (user == null) {
       return const Scaffold(
@@ -75,7 +76,7 @@ class MyPlaylistsPage extends StatelessWidget {
               final songCount = (data['songs'] as List?)?.length ?? 0;
 
               return InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(18),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -88,21 +89,51 @@ class MyPlaylistsPage extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(14),
+                  margin: const EdgeInsets.only(bottom: 14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(18),
+
+                    // 🎨 NỀN ĐẸP + THEO THEME
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: isDark
+                          ? const [
+                        Color(0xFF1E1E1E),
+                        Color(0xFF2A2A2A),
+                      ]
+                          : const [
+                        Colors.white,
+                        Color(0xFFF7F7F7),
+                      ],
+                    ),
+
+                    // 🌫️ SHADOW
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark
+                            ? Colors.black.withOpacity(0.4)
+                            : Colors.black.withOpacity(0.08),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
-                      // 🎵 ICON
+                      // 🎵 PLAYLIST ICON
                       Container(
-                        width: 54,
-                        height: 54,
+                        width: 56,
+                        height: 56,
                         decoration: BoxDecoration(
-                          color: Colors.amberAccent.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Colors.amberAccent,
+                              Colors.orangeAccent,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Icon(
                           Icons.queue_music,
@@ -111,7 +142,7 @@ class MyPlaylistsPage extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 16),
 
                       // 📄 INFO
                       Expanded(
@@ -122,16 +153,20 @@ class MyPlaylistsPage extends StatelessWidget {
                               data['name'] ?? 'Untitled',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color:
+                                isDark ? Colors.white : Colors.black,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 6),
                             Text(
                               '$songCount bài hát',
-                              style: const TextStyle(
-                                color: Colors.grey,
+                              style: TextStyle(
+                                color: isDark
+                                    ? Colors.grey.shade400
+                                    : Colors.grey,
                                 fontSize: 13,
                               ),
                             ),
@@ -170,9 +205,11 @@ class MyPlaylistsPage extends StatelessWidget {
                             ),
                           ),
                         ],
-                        child: const Icon(
+                        icon: Icon(
                           Icons.more_vert,
-                          color: Colors.grey,
+                          color: isDark
+                              ? Colors.grey.shade400
+                              : Colors.grey,
                         ),
                       ),
                     ],
@@ -184,10 +221,11 @@ class MyPlaylistsPage extends StatelessWidget {
         },
       ),
 
+      // ===== CREATE PLAYLIST FAB =====
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.amberAccent, // 🎨 MÀU NỀN
-        foregroundColor: Colors.black,       // 🎨 MÀU ICON + TEXT
-        elevation: 4,
+        backgroundColor: Colors.amberAccent,
+        foregroundColor: Colors.black,
+        elevation: 6,
         icon: const Icon(Icons.add),
         label: const Text(
           'New playlist',
