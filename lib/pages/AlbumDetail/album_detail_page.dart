@@ -196,13 +196,13 @@ class _AlbumDetailPageState extends State<AlbumDetailPage> {
 
                     // 🔀 SHUFFLE
                     OutlinedButton.icon(
-                      icon: const Icon(Icons.shuffle, color: Colors.black),
+                      icon: const Icon(Icons.shuffle, color: Colors.amber),
                       label: const Text(
                         'Xáo trộn',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.amber),
                       ),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.black),
+                        side: const BorderSide(color: Colors.grey),
                       ),
                       onPressed: _shuffleAndPlay,
                     ),
@@ -211,15 +211,13 @@ class _AlbumDetailPageState extends State<AlbumDetailPage> {
 
                     // ▶️ PLAY
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.play_arrow, color: Colors.black),
+                      icon: const Icon(Icons.play_arrow, color: Colors.amber),
                       label: const Text(
                         'Phát',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.amber),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        elevation: 0,
-                        side: const BorderSide(color: Colors.black),
+                        side: const BorderSide(color: Colors.grey),
                       ),
                       onPressed: _playAlbumInOrder,
                     ),

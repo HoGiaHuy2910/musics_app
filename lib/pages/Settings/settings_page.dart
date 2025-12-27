@@ -144,6 +144,15 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Dark mode'),
                 subtitle: const Text('Giao diện tối'),
                 value: Theme.of(context).brightness == Brightness.dark,
+
+                // 🎨 MÀU TRACK (NỀN)
+                activeTrackColor: Colors.amberAccent.withOpacity(0.6),
+                inactiveTrackColor: Colors.grey.shade400,
+
+                // 🎨 MÀU NÚT TRÒN
+                activeColor: Colors.amberAccent,
+                inactiveThumbColor: Colors.white,
+
                 onChanged: (value) {
                   MyApp.of(context).toggleDarkMode(value);
                 },

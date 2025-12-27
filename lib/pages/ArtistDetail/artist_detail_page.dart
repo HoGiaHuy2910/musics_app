@@ -141,10 +141,10 @@ class _ArtistDetailPageState extends State<ArtistDetailPage> {
                           Expanded(
                             child: OutlinedButton.icon(
                               onPressed: () => _playAll(shuffle: false),
-                              icon: const Icon(Icons.play_arrow, color: Colors.black),
+                              icon: const Icon(Icons.play_arrow, color: Colors.amber),
                               label: const Text(
                                 'Play all',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.amber),
                               ),
                             ),
                           ),
@@ -152,10 +152,10 @@ class _ArtistDetailPageState extends State<ArtistDetailPage> {
                           Expanded(
                             child: OutlinedButton.icon(
                               onPressed: () => _playAll(shuffle: true),
-                              icon: const Icon(Icons.shuffle, color: Colors.black),
+                              icon: const Icon(Icons.shuffle, color: Colors.amber),
                               label: const Text(
                                 'Shuffle',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.amber),
                               ),
                             ),
                           ),
@@ -194,7 +194,7 @@ class _ArtistDetailPageState extends State<ArtistDetailPage> {
                         ),
                       ),
                       if (isPlaying)
-                        const Icon(Icons.equalizer, color: Colors.green),
+                        const Icon(Icons.equalizer, color: Colors.amberAccent),
                     ],
                   ),
                   title: Text(

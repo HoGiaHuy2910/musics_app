@@ -73,20 +73,50 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
 
                 return Column(
                   children: [
-                    Slider(
-                      value: pos.inSeconds.toDouble(),
-                      max: dur.inSeconds
-                          .toDouble()
-                          .clamp(1, double.infinity),
-                      onChanged: (v) {
-                        player.seek(Duration(seconds: v.toInt()));
-                      },
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        trackHeight: 4,
+                        activeTrackColor: Colors.amberAccent, // 🟡 thanh chạy
+                        inactiveTrackColor: Colors.grey.shade400, // ⚪ nền xám
+                        thumbColor: Colors.amberAccent, // 🟡 nút kéo
+                        overlayColor: Colors.amberAccent.withOpacity(0.25),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 8,
+                        ),
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 16,
+                        ),
+                      ),
+                      child: Slider(
+                        value: pos.inSeconds.toDouble().clamp(
+                          0,
+                          dur.inSeconds.toDouble().clamp(1, double.infinity),
+                        ),
+                        max: dur.inSeconds
+                            .toDouble()
+                            .clamp(1, double.infinity),
+                        onChanged: (v) {
+                          player.seek(Duration(seconds: v.toInt()));
+                        },
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(_format(pos)),
-                        Text(_format(dur)),
+                        Text(
+                          _format(pos),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          _format(dur),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                          ),
+                        ),
                       ],
                     ),
                   ],
